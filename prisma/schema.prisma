@@ -41,6 +41,8 @@ model Order {
   paid      Boolean @default(false)
   num       String?
   remark    String?
+  rate      Float
+  cur       String
   date      String
 }
 

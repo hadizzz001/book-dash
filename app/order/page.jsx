@@ -130,13 +130,13 @@ const page = () => {
                                                                 <span className="font-semibold">{temp.title}</span>
                                                             </div>
                                                         </td>
-                                                        <td className="py-4">${temp.discount}</td>
+                                                        <td className="py-4">{temp.discount * allTemp1.rate} {allTemp1.cur}</td>
                                                         <td className="py-4">
                                                             <div className="flex items-center">
                                                                 <span className="text-center w-8">{temp.quantity}</span>
                                                             </div>
                                                         </td>
-                                                        <td className="py-4">${allTemp1.total}</td>
+                                                        <td className="py-4">{(temp.discount * allTemp1.rate) * temp.quantity} {allTemp1.cur}</td>
 
 
 
@@ -188,8 +188,12 @@ const page = () => {
                     <span className="font-semibold">{allTemp1.code}</span>
                 </div>
                 <div className="flex justify-between mb-2">
+                    <span className="font-semibold">Delivery Amount</span>
+                    <span className="font-semibold">{allTemp1.delivery} {allTemp1.cur}</span>
+                </div> 
+                <div className="flex justify-between mb-2">
                     <span className="font-semibold">Total Amount</span>
-                    <span className="font-semibold">${allTemp1.total}</span>
+                    <span className="font-semibold">{allTemp1.total} {allTemp1.cur}</span>
                 </div> 
                 <div className="mt-4"> 
                 <textarea 

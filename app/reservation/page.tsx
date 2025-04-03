@@ -220,7 +220,7 @@ const page = () => {
                 <img src={post.userInfo[0].img[0]} width={70} height={70} />
               </td>
               <td>{post.cartItems.fname}</td>
-              <td>${post.total}</td>
+              <td>{post.total}</td>
               <td>
                 {post.userInfo?.reduce(
                   (acc, item) =>
