@@ -15,20 +15,20 @@ export default function AddProduct() {
   const [stock, setStock] = useState('');
   const [img, setImg] = useState(['']);
   const [categoryOptions, setCategoryOptions] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(''); 
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [allSubCategories, setAllSubCategories] = useState([]);
+  const [filteredSubCategories, setFilteredSubCategories] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState('');
   const [isNewArrival, setIsNewArrival] = useState(false);
 
   // Fetch categories
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await fetch(`/api/category`);
-        if (response.ok) {
-          const data = await response.json();
+        const res = await fetch('/api/category');
+        if (res.ok) {
+          const data = await res.json();
           setCategoryOptions(data);
-          setSelectedCategory('');
-        } else {
-          console.error('Failed to fetch categories');
         }
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -37,8 +37,35 @@ export default function AddProduct() {
     fetchCategories();
   }, []);
 
- 
+  // Fetch all subcategories
+  useEffect(() => {
+    async function fetchSubCategories() {
+      try {
+        const res = await fetch('/api/sub');
+        if (res.ok) {
+          const data = await res.json();
+          setAllSubCategories(data);
+        }
+      } catch (error) {
+        console.error('Error fetching subcategories:', error);
+      }
+    }
+    fetchSubCategories();
+  }, []);
 
+  // Filter subcategories based on selected category
+  useEffect(() => {
+    if (selectedCategory) {
+      const filtered = allSubCategories.filter(
+        (sub) => sub.category === selectedCategory
+      );
+      setFilteredSubCategories(filtered);
+      setSelectedSubCategory(''); // reset selection
+    } else {
+      setFilteredSubCategories([]);
+      setSelectedSubCategory('');
+    }
+  }, [selectedCategory, allSubCategories]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,7 +82,8 @@ export default function AddProduct() {
       discount,
       stock,
       img,
-      category: selectedCategory, 
+      category: selectedCategory,
+      subcategory: selectedSubCategory,
       ...(isNewArrival && { arrival: "yes" })
     };
 
@@ -82,6 +110,7 @@ export default function AddProduct() {
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-4">
       <h1 className="text-xl font-bold mb-4">Add New Product</h1>
+
       <input
         type="text"
         placeholder="Title"
@@ -91,7 +120,7 @@ export default function AddProduct() {
         required
       />
 
-      {/* Category Selection */}
+      {/* Category Dropdown */}
       <label className="block text-lg font-bold mb-2">Category</label>
       <select
         value={selectedCategory}
@@ -100,14 +129,32 @@ export default function AddProduct() {
         required
       >
         <option value="" disabled>Select a category</option>
-        {categoryOptions.map((category) => (
-          <option key={category.id} value={category.name}>
-            {category.name}
+        {categoryOptions.map((cat) => (
+          <option key={cat.id} value={cat.name}>
+            {cat.name}
           </option>
         ))}
       </select>
 
- 
+      {/* Subcategory Dropdown */}
+      {filteredSubCategories.length > 0 && (
+        <>
+          <label className="block text-lg font-bold mb-2">Subcategory</label>
+          <select
+            value={selectedSubCategory}
+            onChange={(e) => setSelectedSubCategory(e.target.value)}
+            className="w-full border p-2 mb-4"
+            required
+          >
+            <option value="" disabled>Select a subcategory</option>
+            {filteredSubCategories.map((sub) => (
+              <option key={sub.id} value={sub.name}>
+                {sub.name}
+              </option>
+            ))}
+          </select>
+        </>
+      )}
 
       <input
         type="number"
@@ -148,7 +195,6 @@ export default function AddProduct() {
 
       <Upload onFilesUpload={handleImgChange} />
 
-      {/* New Arrival Checkbox */}
       <div className="flex items-center my-4">
         <input
           type="checkbox"

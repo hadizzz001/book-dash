@@ -12,6 +12,7 @@ price,
 discount,
 img,
 category, 
+subcategory,
 stock,
 arrival 
       } = body;
@@ -28,6 +29,7 @@ console.log("body are: ",body);
         discount,
         img,
         category, 
+        subcategory,
         stock,
         arrival 
           
