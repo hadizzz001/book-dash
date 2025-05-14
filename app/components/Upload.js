@@ -22,8 +22,8 @@ const Upload = ({ onFilesUpload }) => {
       // Determine the upload endpoint based on file type
       const isVideo = file.type.startsWith("video/");
       const uploadUrl = isVideo
-        ? "https://api.cloudinary.com/v1_1/dxlfxsimy/video/upload"
-        : "https://api.cloudinary.com/v1_1/dxlfxsimy/image/upload";
+        ? "https://api.cloudinary.com/v1_1/di6nzrtn3/video/upload"
+        : "https://api.cloudinary.com/v1_1/di6nzrtn3/image/upload";
 
       try {
         const res = await fetch(uploadUrl, {
