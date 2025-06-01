@@ -51,21 +51,25 @@ console.log("body are: ",body);
   }
 }
 
+ 
 export async function GET(req) {
   try {
-    const products = await prisma.product.findMany({
-      
+    const latestProduct = await prisma.product.findMany({
+      orderBy: {
+        id: 'desc',
+      },
     });
 
-    return new Response(JSON.stringify(products), {
+    return new Response(JSON.stringify(latestProduct), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    console.error('Error fetching products:', error);
-    return new Response(JSON.stringify({ error: 'Failed to fetch products' }), {
+    console.error('Error fetching latest product:', error);
+    return new Response(JSON.stringify({ error: 'Failed to fetch latest product' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 }
+
